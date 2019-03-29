@@ -26,3 +26,4 @@ class RatingViewSet(viewsets.ModelViewSet):
     """
     queryset = Rating.objects.all()
     serializer_class = RatingSerializer
+    

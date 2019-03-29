@@ -3,9 +3,13 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 class Beer(models.Model):
     name = models.CharField(max_length=200)
-    average_rating = models.IntegerField(default=0)
     brewery = models.CharField(max_length=200)
     beer_type = models.CharField(max_length=200)
+
+    @property
+    def average_rating(self):
+        ratings = Rating.object.filter(beer=self.id)
+        return sum([r.rating for r in ratings]) / len(ratings)
 
 class Rating(models.Model):
     beer = models.ForeignKey(Beer, on_delete=models.CASCADE)
