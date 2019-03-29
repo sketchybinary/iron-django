@@ -1,0 +1,14 @@
+*.db
+*.sqlite3
+*.pyc
+*~
+.*
+env
+terraform-creds.json
+terraform.tfstate
+terraform.tfstate.backup
+
+# Accept these files in the repository
+!.gitignore
+!.gitlab-ci.yml
+!.travis.yml
