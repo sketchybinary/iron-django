@@ -31,7 +31,6 @@ docker-build:
     - master
   services:
     - docker:dind
-    - postgres:latest
   image: docker:latest
   stage: build
   dependencies:
