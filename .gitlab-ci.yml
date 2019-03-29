@@ -10,7 +10,7 @@ pylint:
   stage: test
   script:
     - pip install -r ${CI_PROJECT_DIR}/requirements.txt
-    - pylint ${CI_PROJECT_DIR}/tutorial/*.py
+    ##- pylint ${CI_PROJECT_DIR}/tutorial/*.py
 
 dependenciesCheck:
   image: python:3
