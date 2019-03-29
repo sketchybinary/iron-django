@@ -1,0 +1,100 @@
+stages:
+  - test
+  - build
+  - validate
+  - plan
+  - apply
+
+pylint:
+  image: python:3
+  stage: test
+  script:
+    - pip install -r ${CI_PROJECT_DIR}/requirements.txt
+    - pylint ${CI_PROJECT_DIR}/tutorial/*.py
+
+dependenciesCheck:
+  image: python:3
+  stage: test
+  script:
+    - pip install safety
+    - safety check -r ${CI_PROJECT_DIR}/requirements.txt
+
+securityCheck:
+  image: python:3
+  stage: test
+  script:
+    - pip install bandit
+    - bandit ${CI_PROJECT_DIR}/tutorial/*.py
+
+docker-build:
+  only:
+    - master
+  services:
+    - docker:dind
+  image: docker:latest
+  stage: build
+  dependencies:
+    - securityCheck
+    - pylint
+    - dependenciesCheck
+  script:
+    - docker build -t brewwolf .
+    - docker tag brewwolf us.gcr.io/brew-wolf/app:${CI_COMMIT_REF_NAME}
+    - echo ${SERVICEACCOUNT} | base64 -d > serviceaccount.json
+    - docker login -u _json_key -p "$(cat serviceaccount.json)"  https://us.gcr.io/
+    - docker push us.gcr.io/brew-wolf/app:${CI_COMMIT_REF_NAME}
+
+tf-validate:
+  only:
+    - master
+  image:
+    name: hashicorp/terraform:light
+    entrypoint:
+      - '/usr/bin/env'
+      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+  stage: validate
+  dependencies:
+    - docker-build
+  script:
+    - echo $SERVICEACCOUNT | base64 -d > serviceaccount.json
+    - terraform init
+    - terraform validate
+
+plan:
+  only:
+    - master
+  image:
+    name: hashicorp/terraform:light
+    entrypoint:
+      - '/usr/bin/env'
+      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+  stage: plan
+  script:
+    - echo $SERVICEACCOUNT | base64 -d > serviceaccount.json
+    - terraform init
+    - terraform plan -out "planfile" -var "image_message=${CI_COMMIT_REF_NAME}"
+  dependencies:
+    - tf-validate
+  artifacts:
+    paths:
+      - planfile
+
+apply:
+  only:
+    - master
+  image:
+    name: hashicorp/terraform:light
+    entrypoint:
+      - '/usr/bin/env'
+      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+  stage: apply
+  environment:
+    name: production
+    url: https://brewwolf.app
+
+  script:
+    - echo $SERVICEACCOUNT | base64 -d > serviceaccount.json
+    - terraform init
+    - terraform apply -input=false "planfile"
+  dependencies:
+    - plan
