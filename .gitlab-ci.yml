@@ -8,6 +8,7 @@ stages:
 pylint:
   image: python:3
   stage: test
+  allow_failure: true
   script:
     - pip install pylint
     - pip install -r ${CI_PROJECT_DIR}/requirements.txt
