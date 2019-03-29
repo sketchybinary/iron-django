@@ -22,7 +22,7 @@ resource "google_sql_database_instance" "master" {
 }
 
 // Terraform plugin to create google SQL user
-resource "google_sql_database" "users" {
+resource "google_sql_user" "users" {
     name = "me"
     instance = "${google_sql_database_instance.master.name}"
     password = "appalpha"
@@ -42,8 +42,7 @@ resource "google_compute_instance" "instance-" {
     }
 
     // Make sure docker is installed on all new instances for later steps
-    metadata_startup_script = "sudo yum update -y; sudo yum install -y docker; sudo systemctl enable docker; sudo systemctl start docker; sudo docker run -d -p 80:80 us.gcr.io/brew-wolf/app:master; echo \"Deployed $${image_message}\""
-
+    metadata_startup_script = "sudo yum update -y; sudo yum install -y docker; sudo systemctl enable docker;sudo systemctl start docker;sudo docker run -d -p 80:80 -e \"db_pass=appalpha\" -e \"db_host=${google_sql_database_instance.master.ip_address.0.ip_address}\" us.gcr.io/brew-wolf/app:master;echo \"Deployed $${image_message}"
     network_interface {
         network = "default"
 
