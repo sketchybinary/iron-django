@@ -1,6 +1,5 @@
 FROM python:3
 
-COPY manage.py /opt/brewwolf/
 COPY requirements.txt /opt/
 COPY brewwolf/ /opt/brewwolf/
 RUN pip install -r /opt/requirements.txt
