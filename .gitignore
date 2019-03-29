@@ -12,3 +12,8 @@ terraform.tfstate.backup
 !.gitignore
 !.gitlab-ci.yml
 !.travis.yml
+
+venv/
+.ipynb_checkpoints/
+.vscode/
+Dockerfile

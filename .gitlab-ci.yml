@@ -8,9 +8,11 @@ stages:
 pylint:
   image: python:3
   stage: test
+  allow_failure: true
   script:
+    - pip install pylint
     - pip install -r ${CI_PROJECT_DIR}/requirements.txt
-    ##- pylint ${CI_PROJECT_DIR}/tutorial/*.py
+    - pylint ${CI_PROJECT_DIR}/brewwolf/brewwolf/*.py ${CI_PROJECT_DIR}/brewwolf/rate_beer/*.py
 
 dependenciesCheck:
   image: python:3
@@ -24,7 +26,7 @@ securityCheck:
   stage: test
   script:
     - pip install bandit
-    ##- bandit ${CI_PROJECT_DIR}/tutorial/*.py
+    - bandit ${CI_PROJECT_DIR}/brewwolf/brewwolf/*.py ${CI_PROJECT_DIR}/brewwolf/rate_beer/*.py
 
 docker-build:
   only:
