@@ -10,6 +10,24 @@ resource "random_id" "instance_id" {
     byte_length = 8
 }
 
+// Terraform plugin to connect go Google Cloud SQL
+resource "google_sql_database_instance" "master" {
+    name = "master-instance"
+    database_version = "POSTGRES_9_6"
+    region = "us-east4"
+
+    settings {
+        tier = "db-f1-micro"
+    }
+}
+
+// Terraform plugin to create google SQL user
+resource "google_sql_database_user" "users" {
+    name = "me"
+    instance = "${google_sql_database_instance.master.name}"
+    password "appalpha"
+}
+
 // A Google Cloud Engine instances
 resource "google_compute_instance" "instance-" {
     machine_type = "f1-micro"
