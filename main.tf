@@ -22,7 +22,7 @@ resource "google_sql_database_instance" "master" {
 }
 
 // Terraform plugin to create google SQL user
-resource "google_sql_database_user" "users" {
+resource "google_sql_database" "users" {
     name = "me"
     instance = "${google_sql_database_instance.master.name}"
     password = "appalpha"
