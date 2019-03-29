@@ -3,7 +3,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 class Beer(models.Model):
     name = models.CharField(max_length=200)
-    average_rating = models.IntegerField(default=0])
+    average_rating = models.IntegerField(default=0)
     brewery = models.CharField(max_length=200)
     beer_type = models.CharField(max_length=200)
 
