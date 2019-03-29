@@ -25,7 +25,7 @@ resource "google_sql_database_instance" "master" {
 resource "google_sql_database_user" "users" {
     name = "me"
     instance = "${google_sql_database_instance.master.name}"
-    password "appalpha"
+    password = "appalpha"
 }
 
 // A Google Cloud Engine instances
