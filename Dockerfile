@@ -2,8 +2,6 @@ FROM python:3
 
 COPY manage.py /opt/brewwolf/
 COPY requirements.txt /opt/
-COPY ./tutorial /opt/brewwolf/tutorial/
-COPY ./snippets /opt/demo/snippets/
 RUN pip install -r /opt/requirements.txt
 
 
