@@ -9,12 +9,12 @@
 
 1. Clone this project
     ```
-    git clone git@git.sp.darkwolf.io:will/drf.git
+    git clone git@git.sp.darkwolf.io:will/brewwolf-python.git
     ```
 
 1. Go into the project and create the virtual-environment
     ```
-    cd drf
+    cd brewwolf-python
     python3 -m venv venv
     source venv/bin/activate
     ```
