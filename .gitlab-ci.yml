@@ -24,7 +24,7 @@ securityCheck:
   stage: test
   script:
     - pip install bandit
-    - bandit ${CI_PROJECT_DIR}/tutorial/*.py
+    ##- bandit ${CI_PROJECT_DIR}/tutorial/*.py
 
 docker-build:
   only:
