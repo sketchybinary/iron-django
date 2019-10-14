@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from rate_beer.models import Beer, Rating
 
 

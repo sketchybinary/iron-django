@@ -25,3 +25,4 @@ class Rating(models.Model):
     rating = models.IntegerField(default=5, validators=[MaxValueValidator(5), MinValueValidator(1)])
     created_date = models.DateTimeField(auto_now_add=True, blank=True)
     comment = models.CharField(max_length=256, blank=True)
+    public = models.BooleanField(default=False)
