@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rate_beer.apps.RateBeerConfig',
 ]
 
 MIDDLEWARE = [
@@ -73,6 +75,8 @@ WSGI_APPLICATION = 'brewwolf.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
+
+
 
 DATABASES = {
     'default': {
@@ -119,7 +123,3 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
-
-# Include our new rest_framework and VotethingsConfig app
-INSTALLED_APPS.append('rest_framework')
-INSTALLED_APPS.append('rate_beer.apps.RateBeerConfig')
