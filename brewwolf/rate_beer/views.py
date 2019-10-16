@@ -11,10 +11,11 @@ class BeerViewSet(viewsets.ModelViewSet):
 
     Additionally we also provide an extra `text` action.
     """
+
     queryset = Beer.objects.all()
     serializer_class = BeerSerializer
 
-    
+
 class RatingViewSet(viewsets.ModelViewSet):
     """
     This viewset automatically provides `list`, `create`, `retrieve`,
@@ -22,6 +23,6 @@ class RatingViewSet(viewsets.ModelViewSet):
 
     Additionally we also provide an extra `text` action.
     """
+
     queryset = Rating.objects.all()
     serializer_class = RatingSerializer
-    

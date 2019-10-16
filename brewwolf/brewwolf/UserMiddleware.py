@@ -1,4 +1,5 @@
 from django.contrib.auth.middleware import RemoteUserMiddleware
 
+
 class RemoteAddrHeaderMiddleware(RemoteUserMiddleware):
-    header = 'USER_AGENT'
+    header = "USER_AGENT"

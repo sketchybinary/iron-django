@@ -8,29 +8,49 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Beer',
+            name="Beer",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=200)),
-                ('average_rating', models.IntegerField(default=0)),
-                ('brewery', models.CharField(max_length=200)),
-                ('beer_type', models.CharField(max_length=200)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=200)),
+                ("average_rating", models.IntegerField(default=0)),
+                ("brewery", models.CharField(max_length=200)),
+                ("beer_type", models.CharField(max_length=200)),
             ],
         ),
         migrations.CreateModel(
-            name='Rating',
+            name="Rating",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('user', models.CharField(max_length=200)),
-                ('rating', models.IntegerField(default=0)),
-                ('created_date', models.DateTimeField(auto_now_add=True)),
-                ('comment', models.CharField(blank=True, max_length=256)),
-                ('beer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='rate_beer.Beer')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("user", models.CharField(max_length=200)),
+                ("rating", models.IntegerField(default=0)),
+                ("created_date", models.DateTimeField(auto_now_add=True)),
+                ("comment", models.CharField(blank=True, max_length=256)),
+                (
+                    "beer",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="rate_beer.Beer"
+                    ),
+                ),
             ],
         ),
     ]
