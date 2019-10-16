@@ -1,6 +1,4 @@
 from rest_framework import viewsets
-from rest_framework.decorators import action
-from rest_framework.response import Response
 
 from rate_beer.models import Beer, Rating
 from rate_beer.serializers import BeerSerializer, RatingSerializer
