@@ -15,8 +15,8 @@ class Beer(models.Model):
         ratings = Rating.objects.filter(beer=self.id)
         if len(ratings) == 0:
             return "NA"
-        else:
-            return sum([r.rating for r in ratings]) / len(ratings)        
+
+        return sum([r.rating for r in ratings]) / len(ratings)
 
 class Rating(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
