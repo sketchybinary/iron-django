@@ -1,7 +1,6 @@
 stages:
   - test
   - build
-  - validat
 
 pylint:
   image: python:3
