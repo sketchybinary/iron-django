@@ -2,6 +2,7 @@ stages:
   - test
   - security
   - build
+  - signing
   - deploy
 
 pylint:
