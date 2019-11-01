@@ -55,16 +55,6 @@ signing:
     - gcloud container binauthz create-signature-payload --artifact-url=${IMAGE_PATH}@${IMAGE_DIGEST} > ./generate_payload.json
     - gpg --batch --local-user "$GPG_USER" --armor --output ./generated_signature.pgp --sign ./generate_payload.json
     - gcloud container binauthz attestations create --artifact-url=${IMAGE_PATH}@${IMAGE_DIGEST} --attestor=projects/${PROJECT_ID}/attestors/${ATTESTOR} --signature-file=./generated_signature.pgp --public-key-id=${FINGERPRINT}
-
-deploy:
-  stage: deploy
-  image:
-    name: google/cloud-sdk:latest
-    entrypoint: [""]
-  script:
-    - echo "$GOOGLE_APPLICATION_CREDENTIALS_JSON" > key.json
-    - gcloud auth activate-service-account --key-file key.json
-    - gcloud config set project $PROJECT_ID
-    - gcloud container clusters get-credentials --zone us-central1-a clak-1
+    - gcloud container clusters get-credentials --zone us-east4-a binary-test-cluster
     - kubectl run $SIGNED_IMAGE --image=${IMAGE_PATH}@${IMAGE_DIGEST}
     - kubectl get pods
