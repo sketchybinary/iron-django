@@ -37,7 +37,6 @@ kaniko:
     - echo "${GOOGLE_APPLICATION_CREDENTIALS_JSON}" > $GOOGLE_APPLICATION_CREDENTIALS
     - /kaniko/executor --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $CI_REGISTRY/$CI_REGISTRY_IMAGE:latest --context dir://$CI_PROJECT_DIR/
 
-
 signing:
   stage: signing
   image:
