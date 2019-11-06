@@ -10,9 +10,9 @@ pylint:
   stage: test
   allow_failure: true
   script:
-    - pip install pylint
+    - pip install pylint pylint-fail-under
     - pip install -r ${CI_PROJECT_DIR}/requirements.txt
-    - pylint ${CI_PROJECT_DIR}/brewwolf/brewwolf/*.py ${CI_PROJECT_DIR}/brewwolf/rate_beer/*.py
+    - pylint-fail-under --fail_under 4.0 ${CI_PROJECT_DIR}/brewwolf/brewwolf/*.py ${CI_PROJECT_DIR}/brewwolf/rate_beer/*.py
 
 dependenciesCheck:
   image: python:3
