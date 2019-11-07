@@ -56,4 +56,3 @@ signing:
     - gcloud container binauthz attestations create --artifact-url=${IMAGE_PATH}@${IMAGE_DIGEST} --attestor=projects/${PROJECT_ID}/attestors/${ATTESTOR} --signature-file=./generated_signature.pgp --public-key-id=${FINGERPRINT}
     - gcloud container clusters get-credentials --zone us-east4-a binary-test-cluster
     - kubectl run $SIGNED_IMAGE --image=${IMAGE_PATH}@${IMAGE_DIGEST}
-    - kubectl get pods
