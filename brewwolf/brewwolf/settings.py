@@ -36,7 +36,7 @@ SECRET_KEY = os.environ.get(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DJANGO_DEBUG")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*",]
 
 
 # Application definition
@@ -59,14 +59,23 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django.contrib.auth.middleware.RemoteUserMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+if os.environ.get("OIDC_OP_AUTHORIZATION_ENDPOINT"):
+    INSTALLED_APPS.insert(2, 'mozilla_django_oidc')
+    AUTHENTICATION_BACKENDS = (
+        'mozilla_django_oidc.auth.OIDCAuthenticationBackend',
+    )
+    OIDC_RP_CLIENT_ID = os.environ['OIDC_RP_CLIENT_ID']
+    OIDC_RP_CLIENT_SECRET = os.environ['OIDC_RP_CLIENT_SECRET']
+else:
+    AUTHENTICATION_BACKENDS = ["brewwolf.UserMiddleware.RemoteAddrHeaderMiddleware"]
+    MIDDLEWARE.insert(6, "django.contrib.auth.middleware.RemoteUserMiddleware")
+
 ROOT_URLCONF = "brewwolf.urls"
 
-AUTHENTICATION_BACKENDS = ["brewwolf.UserMiddleware.RemoteAddrHeaderMiddleware"]
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
