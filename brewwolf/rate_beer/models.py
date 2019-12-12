@@ -2,13 +2,14 @@ import uuid
 
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-
+from django.contrib.auth.models import User
 
 class Beer(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=200)
     brewery = models.CharField(max_length=200)
     beer_type = models.CharField(max_length=200)
+    creator = User()
 
     @property
     def average_rating(self):
