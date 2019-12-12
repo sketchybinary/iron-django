@@ -4,11 +4,11 @@ from rate_beer.models import Beer, Rating
 
 
 class BeerSerializer(serializers.ModelSerializer):
-    creator = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    owner = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = Beer
-        fields = ("id", "name", "average_rating", "brewery", "beer_type", "creator")
+        fields = ("id", "name", "average_rating", "brewery", "beer_type", "owner")
 
 
 class RatingSerializer(serializers.ModelSerializer):

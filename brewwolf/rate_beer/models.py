@@ -10,7 +10,7 @@ class Beer(models.Model):
     name = models.CharField(max_length=200)
     brewery = models.CharField(max_length=200)
     beer_type = models.CharField(max_length=200)
-    creator = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
     @property
     def average_rating(self):
