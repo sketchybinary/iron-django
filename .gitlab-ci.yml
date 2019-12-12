@@ -1,26 +1,29 @@
 stages:
   - test
+  - security
   - build
+  - signing
+  - deploy
 
 pylint:
   image: python:3
   stage: test
   allow_failure: true
   script:
-    - pip install pylint
+    - pip install pylint pylint-fail-under
     - pip install -r ${CI_PROJECT_DIR}/requirements.txt
-    - pylint ${CI_PROJECT_DIR}/brewwolf/brewwolf/*.py ${CI_PROJECT_DIR}/brewwolf/rate_beer/*.py
+    - pylint-fail-under --fail_under 4.0 ${CI_PROJECT_DIR}/brewwolf/brewwolf/*.py ${CI_PROJECT_DIR}/brewwolf/rate_beer/*.py
 
 dependenciesCheck:
   image: python:3
-  stage: test
+  stage: security
   script:
     - pip install safety
     - safety check -r ${CI_PROJECT_DIR}/requirements.txt
 
 securityCheck:
   image: python:3
-  stage: test
+  stage: security
   script:
     - pip install bandit
     - bandit ${CI_PROJECT_DIR}/brewwolf/brewwolf/*.py ${CI_PROJECT_DIR}/brewwolf/rate_beer/*.py
@@ -33,3 +36,24 @@ kaniko:
   script:
     - echo "${GOOGLE_APPLICATION_CREDENTIALS_JSON}" > $GOOGLE_APPLICATION_CREDENTIALS
     - /kaniko/executor --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $CI_REGISTRY/$CI_REGISTRY_IMAGE:latest --context dir://$CI_PROJECT_DIR/
+
+signing:
+  stage: signing
+  image:
+    name: google/cloud-sdk:latest
+    entrypoint: [""]
+  script:
+    - echo "$GOOGLE_APPLICATION_CREDENTIALS_JSON" > key.json
+    - gcloud auth activate-service-account --key-file key.json
+    - gcloud config set project $PROJECT_ID
+    - gcloud container images add-tag us.gcr.io/${PROJECT_ID}/${CI_REGISTRY_IMAGE} us.gcr.io/${PROJECT_ID}/${CI_REGISTRY_IMAGE}:latest
+    - IMAGE_PATH=us.gcr.io/${PROJECT_ID}/${CI_REGISTRY_IMAGE}
+    - IMAGE_DIGEST="$(gcloud container images list-tags --filter="latest" --format='get(digest)' $IMAGE_PATH )"
+    - echo "$GPG_PUB_KEY" | base64 -d | gpg --import
+    - echo "$GPG_PRIV_KEY" | gpg --allow-secret-key-import --import
+    - gcloud container binauthz create-signature-payload --artifact-url=${IMAGE_PATH}@${IMAGE_DIGEST} > ./generate_payload.json
+    - gpg --batch --local-user "$GPG_USER" --armor --output ./generated_signature.pgp --sign ./generate_payload.json
+    - gcloud container binauthz attestations create --artifact-url=${IMAGE_PATH}@${IMAGE_DIGEST} --attestor=projects/${PROJECT_ID}/attestors/${ATTESTOR} --signature-file=./generated_signature.pgp --public-key-id=${FINGERPRINT}
+    - gcloud container clusters get-credentials --zone us-east4-a binary-test-cluster
+    - kubectl run $SIGNED_IMAGE --image=${IMAGE_PATH}@${IMAGE_DIGEST}
+    
