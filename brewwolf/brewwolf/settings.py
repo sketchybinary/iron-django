@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import logging
 import random
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -69,6 +70,8 @@ if os.environ.get("OIDC_OP_AUTHORIZATION_ENDPOINT"):
     OIDC_RP_CLIENT_ID = os.environ["OIDC_RP_CLIENT_ID"]
     OIDC_RP_CLIENT_SECRET = os.environ["OIDC_RP_CLIENT_SECRET"]
 else:
+    logging.error("*** IP Authenticated Users ***")
+    logging.error("*** Super Duper Insecure ***")
     AUTHENTICATION_BACKENDS = ["django.contrib.auth.backends.RemoteUserBackend"]
     MIDDLEWARE.insert(
         MIDDLEWARE.index("django.contrib.auth.middleware.AuthenticationMiddleware"),
