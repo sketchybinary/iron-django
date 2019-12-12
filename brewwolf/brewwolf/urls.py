@@ -21,5 +21,6 @@ from rate_beer import views
 
 router = routers.SimpleRouter()
 router.register(r"beers", views.BeerViewSet)
+router.register(r"ratings", views.RatingViewSet)
 
-urlpatterns = router.urls
+urlpatterns = [path("api/", include(router.urls))]
