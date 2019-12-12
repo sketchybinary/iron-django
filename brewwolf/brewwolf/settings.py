@@ -74,7 +74,7 @@ else:
     logging.error("*** Super Duper Insecure ***")
     AUTHENTICATION_BACKENDS = ["django.contrib.auth.backends.RemoteUserBackend"]
     MIDDLEWARE.insert(
-        MIDDLEWARE.index("django.contrib.auth.middleware.AuthenticationMiddleware"),
+        MIDDLEWARE.index("django.contrib.auth.middleware.AuthenticationMiddleware") + 1,
         "brewwolf.usermiddleware.IPForwardedMiddleware",
     )
 
