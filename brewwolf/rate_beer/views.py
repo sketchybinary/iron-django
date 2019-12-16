@@ -31,9 +31,16 @@ class BeerViewSet(viewsets.ModelViewSet):
     Additionally we also provide an extra `text` action.
     """
 
-    queryset = Beer.objects.all()
+    queryset = Beer.objects.none()
     serializer_class = BeerSerializer
 
+    def get_queryset(self):
+        """
+        This view should return a list of all the beers
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        return Beer.objects.filter(owner=user)
 
 class RatingViewSet(viewsets.ModelViewSet):
     """
