@@ -18,9 +18,13 @@ from django.urls import include, path
 from rest_framework import routers
 
 from rate_beer import views
+from owasp import urls as owasp_urls
 
 router = routers.SimpleRouter()
 router.register(r"beers", views.BeerViewSet)
 router.register(r"ratings", views.RatingViewSet)
 
-urlpatterns = [path("api/", include(router.urls))]
+urlpatterns = [
+        path("api/", include(router.urls)),
+        path("owasp/", include(owasp_urls)),        
+        ]
