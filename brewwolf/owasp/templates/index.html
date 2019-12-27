@@ -1,12 +1,9 @@
-<html>
-  <body>
-    {% if user.is_authenticated %}
-    <p> Welcome, {{user}} </p>
-      <ul>
-        <li><a href="{% url 'messageboard' %}">Message Board</a>
-      </ul>
-    {% else %}
-    Please <a href="{% url 'login' %}">Log in</a>
-    {% endif %}
-  </body>
-</html>
+{% extends 'base.html' %}
+
+{% block content %}
+  {% if user.is_authenticated %}
+  <p> Welcome, {{user}} </p>
+  {% else %}
+  Please <a href="{% url 'login' %}">Log in</a>
+  {% endif %}
+{% endblock %}

@@ -1,25 +1,22 @@
-<html>
-  <head><title>Message Board</title>
-  
-    <style class={{color_class}}></style>
-  </head>  
-  <body>
-    Total Messages Sent: {{total_messages}}
-    <form action="" method="POST">
-      Name: <input type="text" name="name" value="{{user}}">
-      Message: <input type="text" name="q">
-      <input type="submit" value="Submit">
-      <a href="?clearall">Clear Messages</a>
-      {% csrf_token %}
-    </form>
-    {% if message_list %}
-      {% for message in message_list %}
-      <p>{{message.name}} says: {{message.message|safe}}</p>
-      <hr>
-      {% endfor %}
-      </ul>
-    {% else %}
-      <p>No messages are available.</p>
-    {% endif %}
-  </body>
-</html>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+  Total Messages Sent: {{total_messages}}
+  <form action="" method="POST">
+    Name: <input type="text" name="name" value="{{user}}">
+    Message: <input type="text" name="q">
+    <input type="submit" value="Submit">
+    <a href="?clearall">Clear Messages</a>
+    {% csrf_token %}
+  </form>
+  {% if message_list %}
+    {% for message in message_list %}
+    <p>{{message.name}} says: {{message.message|safe}}</p>
+    <hr>
+    {% endfor %}
+    </ul>
+  {% else %}
+    <p>No messages are available.</p>
+  {% endif %}
+  <img src="{% static 'img/head-logo.png' %}">
+{% endblock %}

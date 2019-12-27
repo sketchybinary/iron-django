@@ -1,0 +1,17 @@
+{% load static %}
+<html>
+  <head>
+    <title>Django OWASP</title>
+  </head>
+  <body>
+    {% block breadcrumbs %}
+      <span><a href="{% url 'index' %}">Home</a></span> |
+      <span><a href="{% url 'messageboard' %}">Message Board</a></span> |
+      <br/>
+      <br/>
+      <br/>
+    {% endblock %}
+    {% block content %}
+    {% endblock %}
+  </body>
+</html>
